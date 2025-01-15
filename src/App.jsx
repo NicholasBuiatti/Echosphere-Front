@@ -1,15 +1,15 @@
-import './App.css'
+import "./App.css";
 
 function App() {
-
-
   return (
     <>
-      <h1 className="text-3xl font-bold underline">
-        Hello world!
-      </h1>
+      <div className="flex items-center justify-center h-screen bg-blue-500">
+        <h1 className="text-white text-4xl font-bold">
+          Benvenuto in Vite + React + Tailwind!
+        </h1>
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
