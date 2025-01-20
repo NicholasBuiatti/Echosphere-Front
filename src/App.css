@@ -1,0 +1,14 @@
+@font-face {
+  font-family: "CustomFont";
+  src: url("./assets/fonts/Harabara.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: "CustomFont", sans-serif;
+}
+
+.backg {
+  background: linear-gradient(to bottom right, #5dbda1, #347a84);
+}

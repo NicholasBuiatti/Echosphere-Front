@@ -1,12 +1,14 @@
 import "./App.css";
+import NavBar from "./components/NavBar";
 
 function App() {
   return (
     <>
-      <div className="flex items-center justify-center h-screen bg-blue-500">
-        <h1 className="text-white text-4xl font-bold">
-          Benvenuto in Vite + React + Tailwind!
-        </h1>
+      <div className="h-screen">
+        <NavBar />
+        <div className="flex items-center justify-center backg h-[calc(100vh-5rem)]">
+          <h1 className="text-white text-4xl">EchoSphere</h1>
+        </div>
       </div>
     </>
   );
