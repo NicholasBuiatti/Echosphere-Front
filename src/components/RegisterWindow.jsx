@@ -1,85 +1,58 @@
-import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
-const RegisterWindow = ({ closeWindow }) => {
+const RegisterWindow = () => {
+  const navigate = useNavigate();
+
+  const handleLoginRedirect = () => {
+    navigate("/login");
+  };
+
   return (
-    <div className="font-sans absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-4/12 aspect-square rounded-xl">
-      <h1 className="text-4xl text-center p-3 font-bold">
-        REGISTRA IL TUO PROFILO
-      </h1>
-      <hr />
+    <div className="bg-white w-4/12 rounded-xl shadow-lg">
+      <h1 className="text-xl text-center p-3">REGISTRA IL TUO PROFILO</h1>
+      <p className="text-center text-sm text-green-600">è veloce e semplice</p>
+      <hr className="my-2" />
       <form action="" className="text-center">
-        <div className="mb-2">
-          <label
-            htmlFor="first_name"
-            className="block mb-2 text-sm font-medium"
-          >
-            Nome*
-          </label>
+        <div className="flex justify-between w-11/12 mx-auto my-5">
           <input
             type="text"
             id="first_name"
-            className="bg-gray-500 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-7/12 p-2.5 mx-auto"
-            placeholder="John"
+            className="bg-slate-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+            placeholder="Nome*"
+            required
+          />
+          <input
+            type="text"
+            id="first_name"
+            className="bg-slate-200  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+            placeholder="Cognome*"
             required
           />
         </div>
         <div className="mb-2">
-          <label
-            htmlFor="first_name"
-            className="block mb-2 text-sm font-medium"
-          >
-            Cognome*
-          </label>
-          <input
-            type="text"
-            id="first_name"
-            className="bg-gray-500 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-7/12 p-2.5 mx-auto"
-            placeholder="Doe"
-            required
-          />
-        </div>
-        <div className="mb-2">
-          <label
-            htmlFor="email"
-            className="block mb-2 text-sm font-medium text-gray-900"
-          >
-            Indirizzo Email*
-          </label>
           <input
             type="email"
             id="email"
-            className="bg-gray-500 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-7/12 p-2.5 mx-auto"
-            placeholder="john.doe@company.com"
+            className="bg-slate-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-11/12 p-2.5 mb-5"
+            placeholder="E-mail o numero di telefono*"
             required
           />
         </div>
         <div className="mb-2">
-          <label
-            htmlFor="password"
-            className="block mb-2 text-sm font-medium text-gray-900"
-          >
-            Password*
-          </label>
           <input
             type="password"
             id="password"
-            className="bg-gray-500 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-7/12 p-2.5 mx-auto"
-            placeholder="•••••••••"
+            className="bg-slate-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-11/12 p-2.5"
+            placeholder="Password*"
             required
           />
         </div>
         <div className="mb-2">
-          <label
-            htmlFor="confirm_password"
-            className="block mb-2 text-sm font-medium text-gray-900"
-          >
-            Conferma password*
-          </label>
           <input
             type="password"
             id="confirm_password"
-            className="bg-gray-500 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-7/12 p-2.5 mx-auto"
-            placeholder="•••••••••"
+            className="bg-slate-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-11/12 p-2.5"
+            placeholder="Conferma password*"
             required
           />
         </div>
@@ -106,24 +79,22 @@ const RegisterWindow = ({ closeWindow }) => {
         </div>
         <button
           type="submit"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mb-2 m-2"
+          className="text-white bg-blue-700 hover:bg-blue-800 rounded-lg text-lg px-5 py-2.5 my-2"
         >
-          Invia
-        </button>
-        <button
-          type="button"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mb-2"
-          onClick={() => closeWindow(false)}
-        >
-          Annulla
+          Registrati
         </button>
       </form>
+      <hr className="my-3" />
+      <div className="text-center mb-4">
+        <a
+          onClick={handleLoginRedirect}
+          className="text-blue-700 cursor-pointer"
+        >
+          Hai già un account?
+        </a>
+      </div>
     </div>
   );
-};
-
-RegisterWindow.propTypes = {
-  closeWindow: PropTypes.func.isRequired,
 };
 
 export default RegisterWindow;
