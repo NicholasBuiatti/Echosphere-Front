@@ -1,4 +1,4 @@
-import LoginWindow from "./LoginWindow";
+import RegisterWindow from "./RegisterWindow";
 // import RegisterWindow from "./RegisterWindow";
 import { useState } from "react";
 
@@ -30,7 +30,7 @@ const NavBar = () => {
           </a>
         </div>
       </div>
-      {isOpen && <LoginWindow closeWindow={setIsOpen} />}
+      {isOpen && <RegisterWindow closeWindow={setIsOpen} />}
     </>
   );
 };
