@@ -1,14 +1,14 @@
 @font-face {
-  font-family: "CustomFont";
+  font-family: "Harabara";
   src: url("./assets/fonts/Harabara.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 body {
-  font-family: "CustomFont", sans-serif;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-.backg {
+/* .backg {
   background: linear-gradient(to bottom right, #5dbda1, #347a84);
-}
+} */

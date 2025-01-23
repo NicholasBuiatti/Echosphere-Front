@@ -1,16 +1,17 @@
+import { BrowserRouter as Router } from "react-router-dom";
+import AppRouter from "./AppRouter";
+import Footer from "./components/Footer";
+
 import "./App.css";
-import NavBar from "./components/NavBar";
 
 function App() {
   return (
-    <>
-      <div className="h-screen">
-        <NavBar />
-        <div className="flex items-center justify-center backg h-[calc(100vh-5rem)]">
-          <h1 className="text-white text-4xl">EchoSphere</h1>
-        </div>
-      </div>
-    </>
+    <div className="h-screen">
+      <Router>
+        <AppRouter />
+      </Router>
+      <Footer />
+    </div>
   );
 }
 
