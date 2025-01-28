@@ -10,7 +10,7 @@ const LoginWindow = () => {
   return (
     <div className="w-4/12 border shadow-lg rounded-lg bg-white mx-auto my-10 p-5">
       <h2 className=" text-center text-2xl font-semibold">
-        Accedi a EchoSphere
+        Accedi a echoSphere
       </h2>
       <hr className="my-2" />
       <form action="" className="flex flex-col items-center">
