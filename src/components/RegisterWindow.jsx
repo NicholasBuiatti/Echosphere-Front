@@ -20,8 +20,19 @@ const RegisterWindow = () => {
     password_confirmation: "",
   });
 
+  // Stato per gestire i messaggi di errore
+  const [errors, setErrors] = useState({
+    name: "",
+    surname: "",
+    emailOrPhone: "",
+    password: "",
+    password_confirmation: "",
+    passwordNoMatch: "",
+  });
+
   //creazione variabile per la verifica della password lato utente
   const [passwordMatch, setPasswordMatch] = useState(false);
+  const [passwordStrong, setPasswordStrong] = useState(0);
 
   //cambio dinamico del pacchetto form
   const handleChange = (e) => {
@@ -31,12 +42,31 @@ const RegisterWindow = () => {
       const updatedData = { ...prevData, [name]: value };
 
       // Confronta password e password_confirmation in tempo reale
-      setPasswordMatch(
-        updatedData.password === updatedData.password_confirmation
-      );
+      if (
+        updatedData.password === updatedData.password_confirmation &&
+        updatedData.password !== "" &&
+        updatedData.password_confirmation !== ""
+      ) {
+        setPasswordMatch(true);
+      }
+      if (name === "password") {
+        checkPasswordStrength(value);
+      }
 
       return updatedData;
     });
+  };
+
+  //controllo forza password
+  const checkPasswordStrength = (password) => {
+    let strength = 0;
+
+    if (password.length >= 8) strength++; // Lunghezza minima di 8 caratteri
+    if (/[A-Z]/.test(password)) strength++; // Contiene almeno una maiuscola
+    if (/\d/.test(password)) strength++; // Contiene almeno un numero
+    if (/[^A-Za-z0-9]/.test(password)) strength++; // Contiene almeno un carattere speciale
+
+    setPasswordStrong(strength);
   };
 
   //invio al controllo del pacchetto
@@ -45,20 +75,53 @@ const RegisterWindow = () => {
     const { name, surname, emailOrPhone, password, password_confirmation } =
       formData;
 
+    // Validazione: controlla se i campi sono vuoti
+    let formErrors = {};
+
+    if (!formData.name.trim()) {
+      formErrors.name = "Il nome è obbligatorio";
+    }
+
+    if (!formData.surname.trim()) {
+      formErrors.surname = "Il cognome è obbligatorio";
+    }
+
+    if (!formData.emailOrPhone.trim()) {
+      formErrors.email = "L'email o il numero di telefono sono obbligatori";
+    }
+
+    if (!formData.password.trim()) {
+      formErrors.password = "La password è obbligatoria";
+    } else {
+      if (!/^(?=.*[A-Z])(?=.*\d).+$/.test(formData.password)) {
+        formErrors.password =
+          "La password deve contenere almeno una lettera maiuscola e un numero";
+      }
+    }
+
+    if (!formData.password_confirmation.trim()) {
+      formErrors.password_confirmation = "Devi confermare la password";
+    }
+
+    //match per le password
     if (!passwordMatch) {
-      alert("Le password non corrispondono!");
-      return;
+      formErrors.passwordNoMatch = "Le password non corrispondono";
     }
 
     const data = { name, surname, password, password_confirmation };
 
+    //se il campo email o number_phone include una @ allora lo salvi in email altrimenti se sono numeri li mandi in number_phone
     if (emailOrPhone.includes("@")) {
       data.email = emailOrPhone;
     } else {
       data.number_phone = emailOrPhone;
     }
 
-    try {
+    // Se ci sono errori, aggiorna lo stato degli errori
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+    } else {
+      // Se tutto è valido, esegui l'invio (esempio)
       const response = await axios.post(
         "http://localhost:8000/api/register",
         data,
@@ -67,8 +130,8 @@ const RegisterWindow = () => {
         }
       );
       alert("registrazione avvenuta con successo");
-    } catch (error) {
-      alert(error.response?.data?.message || "Errore nella registrazione");
+
+      setFormData({ name: "", email: "", password: "" });
     }
   };
 
@@ -79,57 +142,104 @@ const RegisterWindow = () => {
       <hr className="my-2" />
       <form action="" onSubmit={handleSubmit} className="text-center">
         <div className="flex justify-between w-11/12 mx-auto my-5">
-          <input
-            name="name"
-            type="text"
-            onChange={handleChange}
-            id="first_name"
-            className="bg-slate-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
-            placeholder="Nome*"
-            required
-          />
-          <input
-            name="surname"
-            type="text"
-            onChange={handleChange}
-            id="first_name"
-            className="bg-slate-200  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
-            placeholder="Cognome*"
-            required
-          />
+          <div>
+            <input
+              name="name"
+              type="text"
+              onChange={handleChange}
+              id="first_name"
+              className={`bg-slate-200 border ${
+                errors.name ? "border-red-600" : ""
+              } border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5`}
+              placeholder="Nome*"
+            />
+            {errors.name && (
+              <p className="text-red-600 text-xs text-start ms-2">
+                {errors.name}
+              </p>
+            )}
+          </div>
+          <div>
+            <input
+              name="surname"
+              type="text"
+              onChange={handleChange}
+              id="first_name"
+              className={`bg-slate-200 border ${
+                errors.surname ? "border-red-600" : ""
+              } border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5`}
+              placeholder="Cognome*"
+              required
+            />
+            {errors.surname && (
+              <p className="text-red-600 text-xs text-start ms-2">
+                {errors.surname}
+              </p>
+            )}
+          </div>
         </div>
-        <div className="mb-2">
+        <div className="mb-5">
           <input
             name="emailOrPhone"
             type="string"
             onChange={handleChange}
             id="email"
-            className="bg-slate-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-11/12 p-2.5 mb-5"
+            className={`bg-slate-200 border border-gray-300 ${
+              errors.email ? "border-red-600" : ""
+            } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-11/12 p-2.5`}
             placeholder="E-mail o numero di telefono*"
-            required
           />
+          {errors.email && (
+            <p className="text-red-600 text-xs text-start ms-4">
+              {errors.email}
+            </p>
+          )}
         </div>
-        <div className="mb-2">
+        <div className="mb-5">
           <input
             name="password"
             type="text"
             onChange={handleChange}
             id="password"
-            className="bg-slate-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-11/12 p-2.5"
+            className={`bg-slate-200 border border-gray-300 ${
+              errors.password ? "border-red-600" : ""
+            } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-11/12 p-2.5`}
             placeholder="Password*"
-            required
           />
+          {errors.password && (
+            <p className="text-red-600 text-xs text-start ms-4">
+              {errors.password}
+            </p>
+          )}
+          {passwordStrong > 0 && (
+            <p>
+              La tua password è{" "}
+              {passwordStrong === 1
+                ? "debole"
+                : passwordStrong === 2
+                ? "media"
+                : passwordStrong === 3
+                ? "forte"
+                : "molto forte"}
+            </p>
+          )}
         </div>
-        <div className="mb-2">
+        <div className="mb-5">
           <input
             name="password_confirmation"
             type="text"
             onChange={handleChange}
             id="password_confirmation"
-            className="bg-slate-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-11/12 p-2.5"
+            className={`bg-slate-200 border border-gray-300 ${
+              errors.password_confirmation ? "border-red-600" : ""
+            } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-11/12 p-2.5`}
             placeholder="Conferma password*"
-            required
           />
+          {errors.password_confirmation && (
+            <p className="text-red-600 text-xs text-start ms-4">
+              {errors.password_confirmation}
+            </p>
+          )}
         </div>
         {passwordMatch && (
           <div className="text-green-500 text-sm mt-2">
