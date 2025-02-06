@@ -10,7 +10,10 @@ function App() {
       <Router>
         <AppRouter />
       </Router>
-      <Footer />
+      <hr />
+      <div className="bg-emerald-100 p-3">
+        <Footer />
+      </div>
     </div>
   );
 }
