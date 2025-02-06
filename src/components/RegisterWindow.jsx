@@ -14,7 +14,7 @@ const RegisterWindow = () => {
   const [formData, setFormData] = useState({
     name: "",
     surname: "",
-    emailOrPhone: "",
+    email: "",
     password: "",
     //nome preimpostato per la lettura sul laravel con confirmed
     password_confirmation: "",
@@ -24,7 +24,7 @@ const RegisterWindow = () => {
   const [errors, setErrors] = useState({
     name: "",
     surname: "",
-    emailOrPhone: "",
+    email: "",
     password: "",
     password_confirmation: "",
     passwordNoMatch: "",
@@ -74,8 +74,7 @@ const RegisterWindow = () => {
   //invio al controllo del pacchetto
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, surname, emailOrPhone, password, password_confirmation } =
-      formData;
+    const { name, surname, email, password, password_confirmation } = formData;
 
     // Validazione: controlla se i campi sono vuoti
     let formErrors = {};
@@ -88,8 +87,8 @@ const RegisterWindow = () => {
       formErrors.surname = "Il cognome è obbligatorio";
     }
 
-    if (!formData.emailOrPhone.trim()) {
-      formErrors.email = "L'email o il numero di telefono sono obbligatori";
+    if (!formData.email.trim()) {
+      formErrors.email = "L'email è obbligatori";
     }
 
     if (!formData.password.trim()) {
@@ -110,14 +109,7 @@ const RegisterWindow = () => {
       formErrors.passwordNoMatch = "Le password non corrispondono";
     }
 
-    const data = { name, surname, password, password_confirmation };
-
-    //se il campo email o number_phone include una @ allora lo salvi in email altrimenti se sono numeri li mandi in number_phone
-    if (emailOrPhone.includes("@")) {
-      data.email = emailOrPhone;
-    } else {
-      data.number_phone = emailOrPhone;
-    }
+    const data = { name, surname, email, password, password_confirmation };
 
     // Se ci sono errori, aggiorna lo stato degli errori
     if (Object.keys(formErrors).length > 0) {
@@ -183,14 +175,14 @@ const RegisterWindow = () => {
         </div>
         <div className="mb-5">
           <input
-            name="emailOrPhone"
-            type="string"
+            name="email"
+            type="email"
             onChange={handleChange}
             id="email"
             className={`bg-slate-200 border border-gray-300 ${
               errors.email ? "border-red-600" : ""
             } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-11/12 p-2.5`}
-            placeholder="E-mail o numero di telefono*"
+            placeholder="E-mail*"
             required
           />
           {errors.email && (

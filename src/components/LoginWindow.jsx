@@ -17,7 +17,7 @@ const LoginWindow = () => {
         <input
           className="border-1 bg-slate-200 rounded-lg focus:border-blue-600 w-full my-3 h-10 px-2"
           type="text"
-          placeholder="E-mail o numero di telefono"
+          placeholder="E-mail"
           required
         />
         <input
