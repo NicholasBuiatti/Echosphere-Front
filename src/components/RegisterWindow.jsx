@@ -48,6 +48,8 @@ const RegisterWindow = () => {
         updatedData.password_confirmation !== ""
       ) {
         setPasswordMatch(true);
+      } else {
+        setPasswordMatch(false);
       }
       if (name === "password") {
         checkPasswordStrength(value);
@@ -152,6 +154,7 @@ const RegisterWindow = () => {
                 errors.name ? "border-red-600" : ""
               } border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5`}
               placeholder="Nome*"
+              required
             />
             {errors.name && (
               <p className="text-red-600 text-xs text-start ms-2">
@@ -188,6 +191,7 @@ const RegisterWindow = () => {
               errors.email ? "border-red-600" : ""
             } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-11/12 p-2.5`}
             placeholder="E-mail o numero di telefono*"
+            required
           />
           {errors.email && (
             <p className="text-red-600 text-xs text-start ms-4">
@@ -195,16 +199,18 @@ const RegisterWindow = () => {
             </p>
           )}
         </div>
-        <div className="mb-5">
+        <div className="mb-5 relative">
           <input
             name="password"
-            type="text"
+            type="password"
             onChange={handleChange}
             id="password"
             className={`bg-slate-200 border border-gray-300 ${
               errors.password ? "border-red-600" : ""
             } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-11/12 p-2.5`}
             placeholder="Password*"
+            required
+            minLength={8}
           />
           {errors.password && (
             <p className="text-red-600 text-xs text-start ms-4">
@@ -212,15 +218,21 @@ const RegisterWindow = () => {
             </p>
           )}
           {passwordStrong > 0 && (
-            <p>
-              La tua password è{" "}
+            <p
+              className={`text-xs px-1 rounded-full absolute mx-auto mt-2 bottom-1 right-7 ${
+                passwordStrong === 1
+                  ? "bg-orange-500"
+                  : passwordStrong === 2
+                  ? "bg-yellow-300"
+                  : "bg-green-600"
+              }`}
+            >
+              {" "}
               {passwordStrong === 1
                 ? "debole"
                 : passwordStrong === 2
                 ? "media"
-                : passwordStrong === 3
-                ? "forte"
-                : "molto forte"}
+                : "forte"}
             </p>
           )}
         </div>
@@ -234,6 +246,7 @@ const RegisterWindow = () => {
               errors.password_confirmation ? "border-red-600" : ""
             } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-11/12 p-2.5`}
             placeholder="Conferma password*"
+            required
           />
           {errors.password_confirmation && (
             <p className="text-red-600 text-xs text-start ms-4">
@@ -261,6 +274,7 @@ const RegisterWindow = () => {
               value=""
               className="w-4 h-4 border border-gray-300 bg-gray-50 focus:ring-3 focus:ring-blue-300"
               required
+              minLength={8}
             />
           </div>
           <label
