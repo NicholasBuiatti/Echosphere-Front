@@ -6,12 +6,12 @@ import "./App.css";
 
 function App() {
   return (
-    <div className="h-screen">
+    <div className="h-screen bg-emerald-100">
       <Router>
         <AppRouter />
       </Router>
       <hr />
-      <div className="bg-emerald-100 p-3">
+      <div className="bg-emerald-100 py-3">
         <Footer />
       </div>
     </div>
