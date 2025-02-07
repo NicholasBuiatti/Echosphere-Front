@@ -222,6 +222,14 @@ const RegisterWindow = () => {
             id="password"
             className={`bg-slate-200 border border-gray-300 ${
               errors.password ? "border-red-600" : ""
+            } ${
+              passwordStrong === 1
+                ? "bg-orange-400"
+                : passwordStrong === 2
+                ? "bg-yellow-300"
+                : passwordStrong === 0
+                ? "" // Nessun bordo se passwordStrong è 0
+                : "bg-green-400"
             } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-11/12 p-2.5`}
             placeholder="Password*"
             required
@@ -232,7 +240,7 @@ const RegisterWindow = () => {
               {errors.password}
             </p>
           )}
-          {passwordStrong > 0 && (
+          {/* {passwordStrong > 0 && (
             <p
               className={`text-xs px-1 rounded-full absolute mx-auto mt-2 bottom-1 right-7 ${
                 passwordStrong === 1
@@ -249,7 +257,7 @@ const RegisterWindow = () => {
                 ? "media"
                 : "forte"}
             </p>
-          )}
+          )} */}
         </div>
         <div className="mb-5">
           <input
