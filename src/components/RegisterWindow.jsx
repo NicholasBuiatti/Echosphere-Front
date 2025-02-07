@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const RegisterWindow = () => {
   const navigate = useNavigate();
@@ -74,6 +75,7 @@ const RegisterWindow = () => {
   //invio al controllo del pacchetto
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const { name, surname, email, password, password_confirmation } = formData;
 
     // Validazione: controlla se i campi sono vuoti
@@ -88,7 +90,7 @@ const RegisterWindow = () => {
     }
 
     if (!formData.email.trim()) {
-      formErrors.email = "L'email è obbligatori";
+      formErrors.email = "L'email è obbligatoria";
     }
 
     if (!formData.password.trim()) {
@@ -123,9 +125,26 @@ const RegisterWindow = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
-      alert("registrazione avvenuta con successo");
-
-      setFormData({ name: "", email: "", password: "" });
+      if (response.data.success) {
+        // Se la registrazione è riuscita, mostra l'alert
+        Swal.fire({
+          position: "top-center",
+          icon: "success",
+          title: "Registrazione completata con successo",
+          text: "Conferma al più presto il link che ti è arrivato all'indirizzo email fornito",
+          showConfirmButton: false,
+          // timer: 1500,
+        });
+        setFormData({
+          name: "",
+          surname: "",
+          email: "",
+          password: "",
+          password_confirmation: "",
+        });
+        setPasswordMatch(false);
+        setPasswordStrong(0);
+      }
     }
   };
 
@@ -141,6 +160,7 @@ const RegisterWindow = () => {
               name="name"
               type="text"
               onChange={handleChange}
+              value={formData.name}
               id="first_name"
               className={`bg-slate-200 border ${
                 errors.name ? "border-red-600" : ""
@@ -159,6 +179,7 @@ const RegisterWindow = () => {
               name="surname"
               type="text"
               onChange={handleChange}
+              value={formData.surname}
               id="first_name"
               className={`bg-slate-200 border ${
                 errors.surname ? "border-red-600" : ""
@@ -178,6 +199,7 @@ const RegisterWindow = () => {
             name="email"
             type="email"
             onChange={handleChange}
+            value={formData.email}
             id="email"
             className={`bg-slate-200 border border-gray-300 ${
               errors.email ? "border-red-600" : ""
@@ -196,6 +218,7 @@ const RegisterWindow = () => {
             name="password"
             type="password"
             onChange={handleChange}
+            value={formData.password}
             id="password"
             className={`bg-slate-200 border border-gray-300 ${
               errors.password ? "border-red-600" : ""
@@ -231,14 +254,16 @@ const RegisterWindow = () => {
         <div className="mb-5">
           <input
             name="password_confirmation"
-            type="text"
+            type="password"
             onChange={handleChange}
+            value={formData.password_confirmation}
             id="password_confirmation"
             className={`bg-slate-200 border border-gray-300 ${
               errors.password_confirmation ? "border-red-600" : ""
             } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-11/12 p-2.5`}
             placeholder="Conferma password*"
             required
+            minLength={8}
           />
           {errors.password_confirmation && (
             <p className="text-red-600 text-xs text-start ms-4">
