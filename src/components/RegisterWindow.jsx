@@ -118,32 +118,44 @@ const RegisterWindow = () => {
       setErrors(formErrors);
     } else {
       // Se tutto è valido, esegui l'invio (esempio)
-      const response = await axios.post(
-        "http://localhost:8000/api/register",
-        data,
-        {
-          headers: { "Content-Type": "application/json" },
+      try {
+        const response = await axios.post(
+          "http://localhost:8000/api/register",
+          data,
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        if (response.data.success) {
+          // Se la registrazione è riuscita, mostra l'alert
+          Swal.fire({
+            position: "top-center",
+            icon: "success",
+            title: "Registrazione completata con successo",
+            text: "Conferma al più presto il link che ti è arrivato all'indirizzo email fornito",
+            showConfirmButton: false,
+            // timer: 1500,
+          });
+          setFormData({
+            name: "",
+            surname: "",
+            email: "",
+            password: "",
+            password_confirmation: "",
+          });
+          setPasswordMatch(false);
+          setPasswordStrong(0);
         }
-      );
-      if (response.data.success) {
-        // Se la registrazione è riuscita, mostra l'alert
-        Swal.fire({
-          position: "top-center",
-          icon: "success",
-          title: "Registrazione completata con successo",
-          text: "Conferma al più presto il link che ti è arrivato all'indirizzo email fornito",
-          showConfirmButton: false,
-          // timer: 1500,
-        });
-        setFormData({
-          name: "",
-          surname: "",
-          email: "",
-          password: "",
-          password_confirmation: "",
-        });
-        setPasswordMatch(false);
-        setPasswordStrong(0);
+      } catch (error) {
+        if (error.response) {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            email:
+              error.response.data.message || "Questa email è già registrata!",
+          }));
+        } else {
+          console.error("Errore di rete o altro", error);
+        }
       }
     }
   };
@@ -220,16 +232,16 @@ const RegisterWindow = () => {
             onChange={handleChange}
             value={formData.password}
             id="password"
-            className={`bg-slate-200 border border-gray-300 ${
+            className={`border border-gray-300 ${
               errors.password ? "border-red-600" : ""
             } ${
               passwordStrong === 1
-                ? "bg-orange-400"
+                ? "bg-orange-600"
                 : passwordStrong === 2
                 ? "bg-yellow-300"
                 : passwordStrong === 0
-                ? "" // Nessun bordo se passwordStrong è 0
-                : "bg-green-400"
+                ? "bg-slate-200"
+                : "bg-green-600"
             } text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-11/12 p-2.5`}
             placeholder="Password*"
             required
@@ -240,24 +252,6 @@ const RegisterWindow = () => {
               {errors.password}
             </p>
           )}
-          {/* {passwordStrong > 0 && (
-            <p
-              className={`text-xs px-1 rounded-full absolute mx-auto mt-2 bottom-1 right-7 ${
-                passwordStrong === 1
-                  ? "bg-orange-500"
-                  : passwordStrong === 2
-                  ? "bg-yellow-300"
-                  : "bg-green-600"
-              }`}
-            >
-              {" "}
-              {passwordStrong === 1
-                ? "debole"
-                : passwordStrong === 2
-                ? "media"
-                : "forte"}
-            </p>
-          )} */}
         </div>
         <div className="mb-5">
           <input
